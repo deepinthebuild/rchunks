@@ -188,7 +188,7 @@ pub trait RChunks {
     /// }
     /// assert_eq!(slice, &[3, 2, 2, 2, 1, 1, 1, 0, 0, 0])
     /// ```
-    fn rchunks_mut<'a>(&'a mut self, csize: usize) -> RChunksMutIter<'a, Self::Item>;
+    fn rchunks_mut<'a>(&'a mut self, size: usize) -> RChunksMutIter<'a, Self::Item>;
 }
 
 impl<T> RChunks for [T] {
