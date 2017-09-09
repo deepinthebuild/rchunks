@@ -1,13 +1,14 @@
 [package]
 name = "rchunks"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Chris McDonald <mail.chris.mcdonald@gmail.com>"]
 repository = "https://github.com/cjm00/rchunks"
 license = "MIT"
 keywords = ["chunks", "rchunks", "iterator", "slice"]
 description = """
 Iterator for slices similar to .chunks() but starting from the back
-of the slice and moving towards the front.
+of the slice and moving towards the front. Differs from .chunks().rev() in
+handling cases where the slice is not a multiple of chunk size.
 """
 
 

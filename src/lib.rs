@@ -3,8 +3,12 @@
 
 //! rchunks - a simple method for right-to-left non-overlapping windows of a slice.
 //!
-//! To use this crate, import the ['RChunks' trait](./trait.RChunks.html)
+//! This crate's methods differ from .chunks().rev() in how it handles slices that
+//! are not a multiple of the chunk size: with .chunks().rev() the smaller lot will
+//! come from the *end* of the slice, whereas with .rchunks() the smaller lot will 
+//! come from the *beginning*.
 //!
+//! To use this crate, import the 'RChunks' trait
 //! ```ignore
 //! use rchunks::RChunks;
 //! ```
