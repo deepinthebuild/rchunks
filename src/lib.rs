@@ -158,7 +158,7 @@ fn rchunks_test_1() {
 }
 
 #[test]
-fn rchunks_test_2() {
+fn rchunks_double_ended_test() {
     let s = vec![0usize, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     let mut s_iter = s.rchunks(3);
 
@@ -167,6 +167,12 @@ fn rchunks_test_2() {
     assert_eq!(s_iter.next_back().unwrap(), &[1usize, 2, 3]);
     assert_eq!(s_iter.next().unwrap(), &[4usize, 5, 6]);
     assert!(s_iter.next().is_none());
+}
+
+#[test]
+fn rchunks_size_hint_test() {
+    let s = vec![0usize, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    assert_eq!(s.rchunks(3).size_hint(), (4, Some(4)));
 }
 
 #[test]
@@ -189,7 +195,7 @@ fn rchunks_mut_test_1() {
 }
 
 #[test]
-fn rchunks_mut_test_2() {
+fn rchunks_mut_double_ended_test() {
     let mut s = vec![0usize, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     let mut s_iter = s.rchunks_mut(3);
 
@@ -198,4 +204,10 @@ fn rchunks_mut_test_2() {
     assert_eq!(s_iter.next_back().unwrap(), &[1usize, 2, 3]);
     assert_eq!(s_iter.next().unwrap(), &[4usize, 5, 6]);
     assert!(s_iter.next().is_none());
+}
+
+#[test]
+fn rchunks_mut_size_hint_test() {
+    let mut s = vec![0usize, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    assert_eq!(s.rchunks_mut(3).size_hint(), (4, Some(4)));
 }
