@@ -1,6 +1,6 @@
 [package]
 name = "rchunks"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Chris McDonald <mail.chris.mcdonald@gmail.com>"]
 repository = "https://github.com/cjm00/rchunks"
 license = "MIT"

@@ -1,5 +1,17 @@
+#![crate_name="rchunks"]
+#![warn(missing_docs)]
+
+//! rchunks - a simple method for right-to-left non-overlapping windows of a slice.
+//!
+//! To use this crate, import the ['RChunks' trait](./trait.RChunks.html)
+//!
+//! ```ignore
+//! use rchunks::RChunks;
+//! ```
+
 use std::iter::{DoubleEndedIterator, ExactSizeIterator};
 
+#[doc(hidden)]
 pub struct RChunksIter<'a, T: 'a> {
     v: &'a [T],
     size: usize,
@@ -54,6 +66,7 @@ impl<'a, T> DoubleEndedIterator for RChunksIter<'a, T> {
     }
 }
 
+#[doc(hidden)]
 pub struct RChunksMutIter<'a, T: 'a> {
     v: &'a mut [T],
     size: usize,
@@ -112,7 +125,13 @@ impl<'a, T> ExactSizeIterator for RChunksMutIter<'a, T> {
     }
 }
 
+/// The `RChunks` trait.
+///
+/// This trait provides two methods on slices: rchunks and rchunks_mut. Both take a usize as input for the chunk size,
+/// see the method documentations for exact behavior and usage.
 pub trait RChunks {
+
+    /// This type is the type of the contents of the underlying slice: Item = T for [T].
     type Item;
 
     /// Returns an iterator over `size` elements of the slice at a time, starting from
