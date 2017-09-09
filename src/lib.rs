@@ -114,26 +114,76 @@ impl<'a, T> ExactSizeIterator for RChunksMutIter<'a, T> {
 
 pub trait RChunks {
     type Item;
-    fn rchunks<'a>(&'a self, chunk_size: usize) -> RChunksIter<'a, Self::Item>;
 
-    fn rchunks_mut<'a>(&'a mut self, chunk_size: usize) -> RChunksMutIter<'a, Self::Item>;
+    /// Returns an iterator over `size` elements of the slice at a time, starting from
+    /// the end of the slice and working backwards. The chunks are slices and do not overlap.
+    /// if `size` does not evenly divide the length of the slice, then the final chunk produced
+    /// by this iterator will have a length less than `size`.
+    ///
+    /// # Panic
+    ///
+    /// Panics if `size` is 0.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use rchunks::RChunks;
+    ///
+    /// let slice = &['d', 'a', 'n', 'k', 'm', 'e', 'm', 'e'];
+    /// let mut iter = slice.rchunks(3);
+    /// assert_eq!(iter.next().unwrap(), &['e', 'm', 'e']);
+    /// assert_eq!(iter.next().unwrap(), &['n', 'k', 'm']);
+    /// assert_eq!(iter.next().unwrap(), &['d', 'a']);
+    /// assert!(iter.next().is_none());
+    /// ```
+    fn rchunks<'a>(&'a self, size: usize) -> RChunksIter<'a, Self::Item>;
+
+    /// Returns an iterator over `size` elements of the slice at a time, starting from
+    /// the end of the slice and working backwards. The chunks are mutable slices and do not overlap.
+    /// if `size` does not evenly divide the length of the slice, then the final chunk produced
+    /// by this iterator will have a length less than `size`.
+    ///
+    /// # Panic
+    ///
+    /// Panics if `size` is 0.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use rchunks::RChunks;
+    ///
+    /// let slice = &mut [0;10];
+    /// {
+    /// let mut iter = slice.rchunks_mut(3);
+    /// let mut counter = 0;
+    /// for chunk in iter {
+    ///     for elem in chunk {
+    ///         *elem = counter;
+    ///     }
+    ///     counter += 1;    
+    /// }
+    /// }
+    /// assert_eq!(slice, &[3, 2, 2, 2, 1, 1, 1, 0, 0, 0])
+    /// ```
+    fn rchunks_mut<'a>(&'a mut self, csize: usize) -> RChunksMutIter<'a, Self::Item>;
 }
 
 impl<T> RChunks for [T] {
     type Item = T;
-    fn rchunks<'a>(&'a self, chunk_size: usize) -> RChunksIter<'a, Self::Item> {
-        assert!(chunk_size != 0, "Size passed to rchunks must be non-zero");
+    #[inline]
+    fn rchunks<'a>(&'a self, size: usize) -> RChunksIter<'a, Self::Item> {
+        assert!(size != 0, "Size passed to rchunks must be non-zero");
         RChunksIter {
             v: self,
-            size: chunk_size,
+            size: size,
         }
     }
-
-    fn rchunks_mut<'a>(&'a mut self, chunk_size: usize) -> RChunksMutIter<'a, Self::Item> {
-        assert!(chunk_size != 0, "Size passed to rchunks_mut must be non-zero");
+    #[inline]
+    fn rchunks_mut<'a>(&'a mut self, size: usize) -> RChunksMutIter<'a, Self::Item> {
+        assert!(size != 0, "Size passed to rchunks_mut must be non-zero");
         RChunksMutIter {
             v: self,
-            size: chunk_size,
+            size: size,
         }
     }
 }
