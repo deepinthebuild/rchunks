@@ -8,7 +8,7 @@
 //! come from the *end* of the slice, whereas with .rchunks() the smaller lot will 
 //! come from the *beginning*.
 //!
-//! To use this crate, import the 'RChunks' trait
+//! To use this crate, import the `RChunks` trait
 //! ```ignore
 //! use rchunks::RChunks;
 //! ```
@@ -131,7 +131,7 @@ impl<'a, T> ExactSizeIterator for RChunksMutIter<'a, T> {
 
 /// The `RChunks` trait.
 ///
-/// This trait provides two methods on slices: rchunks and rchunks_mut. Both take a usize as input for the chunk size,
+/// This trait provides two methods on slices: rchunks and `rchunks_mut`. Both take a usize as input for the chunk size,
 /// see the method documentations for exact behavior and usage.
 pub trait RChunks {
 
@@ -159,7 +159,7 @@ pub trait RChunks {
     /// assert_eq!(iter.next().unwrap(), &['d', 'a']);
     /// assert!(iter.next().is_none());
     /// ```
-    fn rchunks<'a>(&'a self, size: usize) -> RChunksIter<'a, Self::Item>;
+    fn rchunks(&self, size: usize) -> RChunksIter<Self::Item>;
 
     /// Returns an iterator over `size` elements of the slice at a time, starting from
     /// the end of the slice and working backwards. The chunks are mutable slices and do not overlap.
@@ -188,22 +188,22 @@ pub trait RChunks {
     /// }
     /// assert_eq!(slice, &[3, 2, 2, 2, 1, 1, 1, 0, 0, 0])
     /// ```
-    fn rchunks_mut<'a>(&'a mut self, size: usize) -> RChunksMutIter<'a, Self::Item>;
+    fn rchunks_mut(&mut self, size: usize) -> RChunksMutIter<Self::Item>;
 }
 
 impl<T> RChunks for [T] {
     type Item = T;
     #[inline]
-    fn rchunks<'a>(&'a self, size: usize) -> RChunksIter<'a, Self::Item> {
-        assert!(size != 0, "Size passed to rchunks must be non-zero");
+    fn rchunks(&self, size: usize) -> RChunksIter<Self::Item> {
+        assert_ne!(size, 0, "Size passed to rchunks must be non-zero");
         RChunksIter {
             v: self,
             size: size,
         }
     }
     #[inline]
-    fn rchunks_mut<'a>(&'a mut self, size: usize) -> RChunksMutIter<'a, Self::Item> {
-        assert!(size != 0, "Size passed to rchunks_mut must be non-zero");
+    fn rchunks_mut(&mut self, size: usize) -> RChunksMutIter<Self::Item> {
+        assert_ne!(size, 0, "Size passed to rchunks_mut must be non-zero");
         RChunksMutIter {
             v: self,
             size: size,
